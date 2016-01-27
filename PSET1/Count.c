@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <ctype.h>
 /* copy input to output; 1st version */
-main()
+int wordelse();
+
+void main()
 {
 int c;
 //holds previous character
@@ -12,28 +14,27 @@ long linenumber;
 int isThereACharacter;
 //splice
 int splice;
-//else
+//else keyword
 int elseword;
 
 while (c = getchar() != EOF) {
-//check if lines of code contain only whitespace, if so not valid
+//check if lines of code contain a character, if so not valid
  if(!isSpace() && isThereACharacter != 1){isThereACharacter = 1;} 
 
  //checks for line splices
-if (previouschar == '\\' && c == '\n')
-{
+if (previouschar == '\\' && c == '\n'){
 	splice = 1;
 }
 
-//check for each
+//check for "each"
 if(previouschar == ' ' && c == 'e'){
 	elseword = wordelse();
-
 	//in case wordelse reaches EOF
 	if(elseword == 100){
 		break;
 	}
 }
+
 //set previouschar
 previouschar = c;
 
@@ -41,10 +42,10 @@ previouschar = c;
  if(detectNewLine(c)){
  	++linenumber;
  	//check if previous line is valid
- 	if(isValid(isThereACharacter, splice)){
+ 	if(isValid(isThereACharacter, splice, elseword)){
  		//replace \n with  " //%d\n"
- 		printf("//%d\n", linenumber, 'n');
- 		
+ 		printf(" //%d\n", linenumber, 'n');
+ 		continue;
  	}
  	else{
  		--linenumber;
@@ -53,8 +54,8 @@ previouschar = c;
  		//set variables to original state
 			isThereACharacter = 0;
 			splice = 0;
-			continue;
-	}
+			elseword = 0;
+ }
 putchar(c);
 }
 }
@@ -75,8 +76,8 @@ int detectNewLine( int c ){
 }
 
 
-int isValid( int isThereACharacter, ){
-	return (isThereACharacter == 1 && splice == 0) ? 1: 0;
+int isValid( int isThereACharacter, int splice, int elseword){
+	return (isThereACharacter == 1 && splice == 0 && elseword == 0) ? 1: 0;
 }
 
 int wordelse(){
