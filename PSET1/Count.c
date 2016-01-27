@@ -4,21 +4,121 @@
 main()
 {
 int c;
+//holds previous character
 int previouschar;
-
-//this is for lines of whitespace; detects if there is a character between newlines and turns to 1
-int charactermark;
+//holds line number
+long linenumber;
+//detects if there is whitespace between newlines and is 1 when there is a character
+int isThereACharacter;
+//splice
+int splice;
+//else
+int elseword;
 
 while (c = getchar() != EOF) {
+//check if lines of code contain only whitespace, if so not valid
+ if(!isSpace() && isThereACharacter != 1){isThereACharacter = 1;} 
 
-//detect new line
-//if(detectNewLine()) either print numbers of n or don't print else continue with loop ;
-	//for(int i, a, i++)
+ //checks for line splices
+if (previouschar == '\\' && c == '\n')
+{
+	splice = 1;
+}
+
+//check for each
+if(previouschar == ' ' && c == 'e'){
+	elseword = wordelse();
+
+	//in case wordelse reaches EOF
+	if(elseword == 100){
+		break;
+	}
+}
+//set previouschar
+previouschar = c;
+
+//if there is a new line
+ if(detectNewLine(c)){
+ 	++linenumber;
+ 	//check if previous line is valid
+ 	if(isValid(isThereACharacter, splice)){
+ 		//replace \n with  " //%d\n"
+ 		printf("//%d\n", linenumber, 'n');
+ 		
+ 	}
+ 	else{
+ 		--linenumber;
+ 	}
+
+ 		//set variables to original state
+			isThereACharacter = 0;
+			splice = 0;
+			continue;
+	}
 putchar(c);
-
 }
 }
 
-int detectNewLine( int c ){ return (c == '\n')?  1 :  0; }
 
-int isVaid(){}
+
+
+
+//functions
+
+int detectNewLine( int c ){
+  if(c == '\n'){  
+  	return 1;
+  }
+  else{ 
+  	return 0;
+  }  
+}
+
+
+int isValid( int isThereACharacter, ){
+	return (isThereACharacter == 1 && splice == 0) ? 1: 0;
+}
+
+int wordelse(){
+	for(int i = 0; i < 4; i++ ){
+		if(c = getchar() != EOF){
+			switch(i){
+				case '0':
+				if(c != 'l'){
+					return 0;
+				}
+				break;
+
+				case '1':
+				if(c != 's'){
+					return 0;
+				}
+				break;
+
+				case '2':
+				if(c != 'e'){
+					return 0;
+				}
+				break;
+
+				case ' 3':
+				if(c != ''){
+					return 0;
+				}
+				else{
+					return 1;
+				}
+				break;
+
+				default:
+				printf("Case is broken");
+				break;
+			}
+		}
+		else{
+			return 100;
+		}
+	}
+}
+
+	
