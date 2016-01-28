@@ -4,6 +4,7 @@
 int wordelse();
 int detectNewLine();
 int isValid();
+int checkIfRestOfLine();
 
 int main()
 {
@@ -65,7 +66,7 @@ int main()
 			//set variables to original state
 			isThereACharacter = 0;
 			splice = 0;
-			specialwhitespace = 0
+			specialwhitespace = 0;
 			}
 
 
@@ -93,11 +94,13 @@ int detectNewLine( int c ){
 
 
 int isValid( int isThereACharacter, int splice, int specialwhitespace){
-	int together = 0;
-	if((specialwhitespace == 1 && isThereACharacter == 1) || isThereACharacter == 1 ){
-		//printf("specialwhitespace"  );
-		together = 1;
-	}
+	specialwhitespace = checkIfRestOfLine(isThereACharacter, specialwhitespace);
+
+	// int together = 0;
+	// if((specialwhitespace == 1 && isThereACharacter == 1) || isThereACharacter == 1 ){
+	// 	//printf("specialwhitespace"  );
+	// 	together = 1;
+	// }
 	// if (isThereACharacter)
 	// {
 	// 	printf("isThereACharacter"  );
@@ -106,7 +109,7 @@ int isValid( int isThereACharacter, int splice, int specialwhitespace){
 	// if( (isThereACharacter == 1 && specialwhitespace == 1) || specialwhitespace == 0) {
 	// 	together = 1;
 	// }
-	return (isThereACharacter == 1 && splice == 0 && together == 1 ) ? 1: 0;
+	return (isThereACharacter == 1 && splice == 0 && specialwhitespace == 0 ) ? 1: 0;
 }
 
 // int wordelse(int pastc){
@@ -164,4 +167,11 @@ int isValid( int isThereACharacter, int splice, int specialwhitespace){
 // 	return 0;
 // }
 
-int 
+int checkIfRestOfLine(int isThereACharacter, int specialwhitespace){
+	if(( isThereACharacter == 1 && specialwhitespace == 1 ) || specialwhitespace == 0 ){
+		return 0;
+	}
+	else{
+		return 1;
+	}
+}
