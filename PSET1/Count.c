@@ -21,14 +21,15 @@ int main()
 	int elseword= 0;
 //specialwhitespace
 	int specialwhitespace = 0;
-	// do not reset previous char
+// do not reset previous char
 	int donotreset = 0;
+//comment
+	int comment = 0;
+//open
+	int open = 0;
 
 	while ((c = getchar()) != EOF) {
-//check if lines of code contain a character, if so not valid
-		if(!isspace(c) &&  c != '{' && c !='}' && c != '(' && c != ')'  ){isThereACharacter = 1;} 
-
- //checks for line splices
+		 //checks for line splices
 		if (c == '\\'){
 			putchar(c);
 			if((c= getchar()) == '\n'){
@@ -36,19 +37,26 @@ int main()
 			}
 		}
 
+//check if lines of code contain a character, if so not valid
+		if(!isspace(c) &&  c != '{' && c !='}' && c != '(' && c != ')'  ){isThereACharacter = 1;} 
+
 //check for specialwhitespace
 		if( c == '{' || c =='}' || c == '(' || c == ')'){
 			specialwhitespace = 1;
 			//printf("specialwhitespace");
 		}
-//check for "each"
-	// 	if(previouschar == ' ' && c == 'e'){
-	// 		elseword = wordelse(c);
-	// //in case wordelse reaches EOF
-	// 		if(elseword == 100){
-	// 			break;
-	// 		}
-	// 	}
+
+//comments
+		// if(previouschar == '/' && c == '/'){
+		// 	comment = 1;
+		// }
+		// if(previouschar == '/' && c == '*'){
+		// 	open = 1;
+		// }
+		// if(open == 1 && previouschar == '*' && c == '/'){
+		// 	open = 3;
+		// }
+//quotes
 
 //set previouschar
 		if(donotreset != 1){
@@ -59,7 +67,7 @@ int main()
 		if(detectNewLine(c)){
 			++linenumber;
  	//check if previous line is valid
-			if(isValid(isThereACharacter, donotreset, specialwhitespace)){
+			if(isValid(isThereACharacter, donotreset, specialwhitespace, comment, open)){
  		//replace \n with  " //%d\n"
 			printf(" //%d\n", linenumber);
 			//set variables to original state
@@ -71,6 +79,16 @@ int main()
 			else{
 				--linenumber;
 			//set variables to original state
+				//do not turn comment to 0 if there is a splice
+				//possibly refactor
+					if(comment == 1 && donotreset==1){
+					}
+					else{
+						comment =0;
+					}
+					if(open == 3){
+						open = 0;
+					}
 			isThereACharacter = 0;
 			donotreset = 0;
 			specialwhitespace = 0;
@@ -84,10 +102,6 @@ int main()
 	}
 }
 
-
-
-
-
 //functions
 
 int detectNewLine( int c ){
@@ -100,65 +114,11 @@ int detectNewLine( int c ){
 }
 
 
-int isValid( int isThereACharacter, int donotreset, int specialwhitespace){
+int isValid( int isThereACharacter, int donotreset, int specialwhitespace, int comment, int open){
 	specialwhitespace = checkIfRestOfLine(isThereACharacter, specialwhitespace);
-	return (isThereACharacter == 1 && specialwhitespace == 0 && donotreset == 0) ? 1: 0;
+	comment = checkIfRestOfLine(isThereACharacter, comment);
+	return (isThereACharacter == 1 && specialwhitespace == 0 && donotreset == 0 && comment == 0 && open == 0) ? 1: 0;
 }
-
-// int wordelse(int pastc){
-// 	int c;
-//  putchar(pastc)
-// 	for(int i = 0; i < 4; i++ ){
-// 		if((c = getchar()) != EOF){
-// 			switch(i){
-// 				case '0':
-// 				if(c != 'l'){
-// 					return 0;
-// 				}
-// 				else{
-// 					printf("#2");
-// 				}
-// 				break;
-
-// 				case '1':
-// 				if(c != 's'){
-// 					return 0;
-// 				}
-// 				else{
-// 					printf("#2");
-// 				}
-// 				break;
-
-// 				case '2':
-// 				if(c != 'e'){
-// 					return 0;
-// 				}
-// 				else{
-// 					putchar(c);
-// 				}				
-// 				break;
-
-// 				case '3':
-// 				if(c != ' '){
-// 					return 0;
-// 				}
-// 				else{
-// 					return 1;
-// 				}
-// 				break;
-
-// 				// default:
-// 				// printf("Case is broken");
-// 				// return 99;
-// 				// break;
-// 			}
-// 		}
-// 		// else{
-// 		// 	return 100;
-// 		// }
-// 	}
-// 	return 0;
-// }
 
 int checkIfRestOfLine(int isThereACharacter, int specialwhitespace){
 	if(( isThereACharacter == 1 && specialwhitespace == 1 ) || specialwhitespace == 0 ){
