@@ -21,14 +21,19 @@ int main()
 	int elseword= 0;
 //specialwhitespace
 	int specialwhitespace = 0;
+	// do not reset previous char
+	int donotreset = 0;
 
 	while ((c = getchar()) != EOF) {
 //check if lines of code contain a character, if so not valid
 		if(!isspace(c) &&  c != '{' && c !='}' && c != '(' && c != ')'  ){isThereACharacter = 1;} 
 
  //checks for line splices
-		if (previouschar == '\\' && c == '\n'){
-			splice = 1;
+		if (c == '\\'){
+			putchar(c);
+			if((c= getchar()) == '\n'){
+				donotreset = 1;
+			}
 		}
 
 //check for specialwhitespace
@@ -46,18 +51,20 @@ int main()
 	// 	}
 
 //set previouschar
-		previouschar = c;
+		if(donotreset != 1){
+			previouschar = c;
+		}
 
 //if there is a new line
 		if(detectNewLine(c)){
 			++linenumber;
  	//check if previous line is valid
-			if(isValid(isThereACharacter, splice, specialwhitespace)){
+			if(isValid(isThereACharacter, donotreset, specialwhitespace)){
  		//replace \n with  " //%d\n"
 			printf(" //%d\n", linenumber);
 			//set variables to original state
 			isThereACharacter = 0;
-			splice = 0;
+			donotreset = 0;
 			specialwhitespace = 0;
 				continue;
 			}
@@ -65,7 +72,7 @@ int main()
 				--linenumber;
 			//set variables to original state
 			isThereACharacter = 0;
-			splice = 0;
+			donotreset = 0;
 			specialwhitespace = 0;
 			}
 
@@ -93,23 +100,9 @@ int detectNewLine( int c ){
 }
 
 
-int isValid( int isThereACharacter, int splice, int specialwhitespace){
+int isValid( int isThereACharacter, int donotreset, int specialwhitespace){
 	specialwhitespace = checkIfRestOfLine(isThereACharacter, specialwhitespace);
-
-	// int together = 0;
-	// if((specialwhitespace == 1 && isThereACharacter == 1) || isThereACharacter == 1 ){
-	// 	//printf("specialwhitespace"  );
-	// 	together = 1;
-	// }
-	// if (isThereACharacter)
-	// {
-	// 	printf("isThereACharacter"  );
-	// }
-	// 
-	// if( (isThereACharacter == 1 && specialwhitespace == 1) || specialwhitespace == 0) {
-	// 	together = 1;
-	// }
-	return (isThereACharacter == 1 && splice == 0 && specialwhitespace == 0 ) ? 1: 0;
+	return (isThereACharacter == 1 && specialwhitespace == 0 && donotreset == 0) ? 1: 0;
 }
 
 // int wordelse(int pastc){
