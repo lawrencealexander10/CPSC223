@@ -53,8 +53,8 @@ int main()
  	//check if previous line is valid
 			if(isValid(isThereACharacter, splice, specialwhitespace)){
  		//replace \n with  " //%d\n"
-				printf(" //%d\n", linenumber);
-				 		//set variables to original state
+			printf(" //%d\n", linenumber);
+			//set variables to original state
 			isThereACharacter = 0;
 			splice = 0;
 			specialwhitespace = 0;
@@ -62,10 +62,10 @@ int main()
 			}
 			else{
 				--linenumber;
-				 		//set variables to original state
+			//set variables to original state
 			isThereACharacter = 0;
 			splice = 0;
-			specialwhitespace = 0;
+			specialwhitespace = 0
 			}
 
 
@@ -164,4 +164,4 @@ int isValid( int isThereACharacter, int splice, int specialwhitespace){
 // 	return 0;
 // }
 
-
+int 
